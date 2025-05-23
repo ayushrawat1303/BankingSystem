@@ -2,7 +2,9 @@ package com.banking.demo.service;
 
 import com.banking.demo.Utils.AccountUtils;
 import com.banking.demo.dto.*;
+import com.banking.demo.entity.Transaction;
 import com.banking.demo.entity.User;
+import com.banking.demo.repository.TransactionRepository;
 import com.banking.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,8 @@ import java.math.BigDecimal;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
+    TransactionRepository transactionRepository;
     @Override
     //check if user already exists/save the details of new user in the db
     public BankResponse createAccount(UserRequest userRequest) {
@@ -101,6 +104,14 @@ public class UserServiceImpl implements UserService {
             //updating the db
             userRepository.save(foundUser);
 
+            //updating the record in transactions table
+            Transaction newTransaction=Transaction.builder()
+                    .accountNumber1(creditRequest.getAccountNumber())
+                    .accountBalance1(foundUser.getAccountBalance())
+                    .status(AccountUtils.status)
+                    .build();
+            transactionRepository.save(newTransaction);
+
             BankResponse bankResponse = BankResponse.builder()
                     .responseCode(AccountUtils.amtCreditedCode)
                     .responseMessage(AccountUtils.amtCreditedMessage)
@@ -147,6 +158,14 @@ public class UserServiceImpl implements UserService {
 
                 //saving the updated accountBalance
                 userRepository.save(foundUser);
+
+                //updating the record in transactions table
+                Transaction newTransaction=Transaction.builder()
+                        .accountNumber1(creditRequest.getAccountNumber())
+                        .accountBalance1(foundUser.getAccountBalance())
+                        .status(AccountUtils.status)
+                        .build();
+                transactionRepository.save(newTransaction);
 
                 BankResponse bankResponse = BankResponse.builder()
                         .responseCode(AccountUtils.amtDebitedCode)
@@ -209,6 +228,16 @@ public class UserServiceImpl implements UserService {
                 //save the updated amounts to db
                 userRepository.save(account1);
                 userRepository.save(account2);
+
+                //updating the record in transactions table
+                Transaction newTransaction=Transaction.builder()
+                        .accountNumber1(transferRequest.getAccountNumber1())
+                        .accountBalance1(account1.getAccountBalance())
+                        .accountNumber2(transferRequest.getAccountNumber2())
+                        .accountBalance2(account2.getAccountBalance())
+                        .status(AccountUtils.status)
+                        .build();
+                transactionRepository.save(newTransaction);
 
                 TransferBankResponse transferBankResponse3 = TransferBankResponse.builder()
                         .responseCode(AccountUtils.amtTranserferredCode)

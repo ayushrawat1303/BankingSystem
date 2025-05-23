@@ -31,7 +31,7 @@ public class AccountUtils {
         BigDecimal updatedBalance=currBalance.subtract(debitAmount);
         return updatedBalance;
     }
-
+    public static final String status="Completed";
     public static final String userExistsBankCode="001";
     public static final String userExistsResponseMessage= "User already exists!";
     public static final String userSavedResponseCode="002";
