@@ -24,6 +24,16 @@ This is a simple RESTful banking system built with **Spring Boot** that supports
 - **Lombok**
 - **Postman** for API testing
 
+## 🛠 Database Schema Update
+
+### 📄 `users` Table  
+This table stores all user account information.
+
+### 📄 `transaction_rec` Table  
+This table records transaction logs whenever any transaction occurs between accounts.
+
+Both tables are essential for managing user data and tracking transaction history within the application.
+
 ## 🚀 How to Run
 
 1. **Clone the repository**
